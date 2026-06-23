@@ -1,182 +1,114 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Login Modern</title>
+    <title>Halaman Login Firebase</title>
     <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        /* Desain tampilan sederhana agar form berada di tengah layar */
         body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0; /* Menghilangkan margin bawaan browser */
-    
-    background-image: url('1726933753318.jpg');
-    background-size: cover; /* Memastikan gambar memenuhi seluruh layar */
-    background-position: center; /* Memastikan gambar tetap di tengah */
-    background-repeat: no-repeat; /* Mencegah gambar berulang/banyak */
-}
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
         }
-
         .login-container {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 400px;
-        }
-
-            .login-container h2 {
-                margin-bottom: 24px;
-                color: #333333;
-                font-size: 28px;
-                font-weight: 600;
-                text-align: center;
-            }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-            .input-group input {
-                width: 100%;
-                padding: 14px 16px;
-                border: 2px solid #e1e1e1;
-                border-radius: 8px;
-                font-size: 16px;
-                transition: all 0.3s ease;
-                outline: none;
-            }
-
-                .input-group input:focus {
-                    border-color: #764ba2;
-                    box-shadow: 0 0 8px rgba(118, 75, 162, 0.2);
-                }
-
-        /* Pesan Error */
-        .error-message {
-            color: #e53e3e;
-            font-size: 14px;
-            margin-bottom: 15px;
-            display: none; /* Sembunyi secara default */
-            text-align: center;
-            background-color: #fff5f5;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #fed7d7;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background-color: #764ba2;
-            color: white;
-            border: none;
+            background: white;
+            padding: 30px;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.1s ease;
-            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
         }
-
-            .btn-login:hover {
-                background-color: #5a377e;
-            }
-
-            .btn-login:active {
-                transform: scale(0.98);
-            }
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-size: 14px; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #pesan-error { color: red; font-size: 13px; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <h2>Masuk</h2>
+<div class="login-container">
+    <h2>Masuk Aplikasi</h2>
+    
+    <!-- Formulir Login -->
+    <form id="form-login">
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="contoh@email.com" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Minimal 6 karakter" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
 
-        <!-- Tempat menampilkan pesan kesalahan -->
-        <div id="errorBox" class="error-message">Email atau password salah!</div>
+    <!-- Tempat menampilkan pesan error jika gagal login -->
+    <div id="pesan-error"></div>
+</div>
 
-        <!-- Tag <a> dihapus, diganti dengan handle submit pada form -->
-        <form id="loginForm">
-            <div class="input-group">
-                <input type="email" id="emailInput" placeholder="Email atau ponsel" value="jordymempun@gmail.com" required>
-            </div>
-            <div class="input-group">
-                <input type="password" id="passwordInput" placeholder="Masukkan sandi Anda" value="123456" required>
-            </div>
-            <!-- Type diubah menjadi submit -->
-            <button type="submit" class="btn-login">Berikutnya</button>
-        </form>
-    </div>
+<!-- SCRIPT FIREBASE -->
+<script type="module">
+    // 1. Mengimpor library Firebase Core dan Authentication
+    import { initializeApp } from "https://gstatic.com";
+    import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
 
-    <script>
-      import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
+    // 2. GANTI DENGAN KODE KONFIGURASI PROYEK FIREBASE ANDA SENDIRI
+    const firebaseConfig = {
+        apiKey: "AIzaSyAnda...",
+        authDomain: "://firebaseapp.com",
+        projectId: "proyek-anda",
+        storageBucket: "://appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456:web:abc123xyz"
+    };
 
-const auth = getAuth();
+    // Inisialisasi Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-// Contoh fungsi saat tombol login diklik
-function jalankanLogin(event) {
-    event.preventDefault(); // Menahan halaman agar tidak refresh
+    // 3. Logika Penanganan Form Login
+    const formLogin = document.getElementById("form-login");
+    const pesanError = document.getElementById("pesan-error");
 
-    // Menggunakan data contoh Anda (disarankan minimal 6 karakter)
-    const emailAplikasi = "jordymempun@gmail.com";
-    const passwordAplikasi = "123456"; 
+    formLogin.addEventListener("submit", (e) => {
+        // Menahan agar browser tidak otomatis refresh halaman saat tombol diklik
+        e.preventDefault(); 
 
-    signInWithEmailAndPassword(auth, emailAplikasi, passwordAplikasi)
-        .then((userCredential) => {
-            console.log("Login Berhasil!", userCredential.user);
-            window.location.href = "halaman4.html"; // Pindah halaman
-        })
-        .catch((error) => {
-            console.error("Gagal Login:", error.code, error.message);
-            alert("Gagal masuk: " + error.message);
-        });
-}
+        // Mengambil data teks yang diketik user
+        const txtEmail = document.getElementById("email").value;
+        const txtPassword = document.getElementById("password").value;
 
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+        pesanError.innerText = "Memproses...";
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCSdKzabXgWTMjuGyDzRKfSgBzSqgJLPjw",
-    authDomain: "smkn1pdw-87d17.firebaseapp.com",
-    databaseURL: "https://smkn1pdw-87d17-default-rtdb.firebaseio.com",
-    projectId: "smkn1pdw-87d17",
-    storageBucket: "smkn1pdw-87d17.firebasestorage.app",
-    messagingSenderId: "42700023540",
-    appId: "1:42700023540:web:86d3712e318a0da07820a1"
-  };
-
- const app = initializeApp(firebaseConfig);
-      const database = getDatabase(app);
-
-      // --- TEMPELKAN KODE LISTEN DI SINI ---
-      const folderPesan = ref(database, 'pesan/');
-      onValue(folderPesan, (snapshot) => {
-        const data = snapshot.val();
-        
-        // Kode tambahan untuk menampilkan data ke halaman web:
-        if (data) {
-          document.getElementById("text-firebase").innerText = data.teks;
-          console.log("Data realtime terbaru:", data.teks);
-        }
-      });
-      // ------------------------------------
+        // Proses verifikasi ke Firebase Authentication
+        signInWithEmailAndPassword(auth, txtEmail, txtPassword)
+            .then((userCredential) => {
+                // JIKA BERHASIL: Pindah ke halaman kedua
+                pesanError.innerText = "";
+                alert("Login Berhasil!");
+                window.location.href = "halaman4.html"; 
+            })
+            .catch((error) => {
+                // JIKA GAGAL: Tampilkan pesan error di bawah form tanpa refresh halaman
+                console.error("Error dari Firebase:", error.code);
+                
+                if (error.code === 'auth/invalid-credential') {
+                    pesanError.innerText = "Email atau Password salah!";
+                } else if (error.code === 'auth/invalid-email') {
+                    pesanError.innerText = "Format email tidak valid!";
+                } else {
+                    pesanError.innerText = "Gagal masuk: " + error.message;
+                }
+            });
+    });
 </script>
+
 </body>
 </html>
