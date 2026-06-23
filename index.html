@@ -160,8 +160,21 @@
     appId: "1:42700023540:web:86d3712e318a0da07820a1"
   };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+ const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+
+      // --- TEMPELKAN KODE LISTEN DI SINI ---
+      const folderPesan = ref(database, 'pesan/');
+      onValue(folderPesan, (snapshot) => {
+        const data = snapshot.val();
+        
+        // Kode tambahan untuk menampilkan data ke halaman web:
+        if (data) {
+          document.getElementById("text-firebase").innerText = data.teks;
+          console.log("Data realtime terbaru:", data.teks);
+        }
+      });
+      // ------------------------------------
 </script>
 </body>
 </html>
