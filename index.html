@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman Login Firebase</title>
     <style>
-        /* Desain tampilan sederhana agar form berada di tengah layar */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -36,30 +35,29 @@
 <div class="login-container">
     <h2>Masuk Aplikasi</h2>
     
-    <!-- Formulir Login -->
     <form id="form-login">
         <div class="input-group">
             <label for="email">Email</label>
-            <input type="email" id="email" placeholder="contoh@email.com" required>
+            <!-- Email Anda sudah otomatis terpasang sebagai nilai bawaan -->
+            <input type="email" id="email" value="Jordymempun@gmail.com" required>
         </div>
         <div class="input-group">
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Minimal 6 karakter" required>
+            <!-- Kata sandi Anda sudah otomatis terpasang sebagai nilai bawaan -->
+            <input type="password" id="password" value="@Jfm010105" required>
         </div>
         <button type="submit">Login</button>
     </form>
 
-    <!-- Tempat menampilkan pesan error jika gagal login -->
     <div id="pesan-error"></div>
 </div>
 
 <!-- SCRIPT FIREBASE -->
 <script type="module">
-    // 1. Mengimpor library Firebase Core dan Authentication
     import { initializeApp } from "https://gstatic.com";
     import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
 
-    // 2. GANTI DENGAN KODE KONFIGURASI PROYEK FIREBASE ANDA SENDIRI
+    // PENTING: Ganti isi kode di bawah ini dengan milik Firebase Console Anda sendiri
     const firebaseConfig = {
         apiKey: "AIzaSyAnda...",
         authDomain: "://firebaseapp.com",
@@ -69,40 +67,37 @@
         appId: "1:123456:web:abc123xyz"
     };
 
-    // Inisialisasi Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // 3. Logika Penanganan Form Login
     const formLogin = document.getElementById("form-login");
     const pesanError = document.getElementById("pesan-error");
 
     formLogin.addEventListener("submit", (e) => {
-        // Menahan agar browser tidak otomatis refresh halaman saat tombol diklik
-        e.preventDefault(); 
+        e.preventDefault(); // Menahan refresh halaman otomatis
 
-        // Mengambil data teks yang diketik user
+        // Mengambil data dari kolom input (otomatis membaca data Anda)
         const txtEmail = document.getElementById("email").value;
         const txtPassword = document.getElementById("password").value;
 
-        pesanError.innerText = "Memproses...";
+        pesanError.style.color = "blue";
+        pesanError.innerText = "Memproses verifikasi...";
 
-        // Proses verifikasi ke Firebase Authentication
+        // Proses Login ke Firebase
         signInWithEmailAndPassword(auth, txtEmail, txtPassword)
             .then((userCredential) => {
-                // JIKA BERHASIL: Pindah ke halaman kedua
                 pesanError.innerText = "";
-                alert("Login Berhasil!");
-                window.location.href = "halaman4.html"; 
+                alert("Login Berhasil! Selamat Datang.");
+                window.location.href = "halaman2.html"; // Pindah halaman setelah sukses
             })
             .catch((error) => {
-                // JIKA GAGAL: Tampilkan pesan error di bawah form tanpa refresh halaman
                 console.error("Error dari Firebase:", error.code);
+                pesanError.style.color = "red";
                 
                 if (error.code === 'auth/invalid-credential') {
-                    pesanError.innerText = "Email atau Password salah!";
-                } else if (error.code === 'auth/invalid-email') {
-                    pesanError.innerText = "Format email tidak valid!";
+                    pesanError.innerText = "Email atau Password salah! Periksa apakah akun sudah didaftarkan di Firebase Console.";
+                } else if (error.code === 'auth/user-not-found') {
+                    pesanError.innerText = "Akun belum terdaftar di Firebase Console.";
                 } else {
                     pesanError.innerText = "Gagal masuk: " + error.message;
                 }
