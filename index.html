@@ -114,7 +114,7 @@
                 <input type="email" id="emailInput" placeholder="Email atau ponsel" value="jordymempun@gmail.com" required>
             </div>
             <div class="input-group">
-                <input type="password" id="passwordInput" placeholder="Masukkan sandi Anda" value="12345" required>
+                <input type="password" id="passwordInput" placeholder="Masukkan sandi Anda" value="123456" required>
             </div>
             <!-- Type diubah menjadi submit -->
             <button type="submit" class="btn-login">Berikutnya</button>
@@ -122,27 +122,29 @@
     </div>
 
     <script>
-        // Data akun penentu (bisa Anda ganti sesuai kebutuhan)
-        const emailBenar = "jordymempun@gmail.com";
-        const passwordBenar = "12345";
+      import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
 
-        document.getElementById('loginForm').addEventListener('submit', function (event) {
-            // Mencegah form langsung berpindah halaman secara otomatis
-            event.preventDefault();
+const auth = getAuth();
 
-            // Ambil data inputan user
-            const inputEmail = document.getElementById('emailInput').value;
-            const inputPassword = document.getElementById('passwordInput').value;
-            const errorBox = document.getElementById('errorBox');
+// Contoh fungsi saat tombol login diklik
+function jalankanLogin(event) {
+    event.preventDefault(); // Menahan halaman agar tidak refresh
 
-            // Proses Pengecekan
-            if (inputEmail === emailBenar && inputPassword === passwordBenar) {
-                errorBox.style.display = 'none'; // Sembunyikan error jika benar
-                window.location.href = "halaman4.html"; // Pindah ke halaman sukses
-            } else {
-                errorBox.style.display = 'block'; // Tampilkan pesan error jika salah
-            }
+    // Menggunakan data contoh Anda (disarankan minimal 6 karakter)
+    const emailAplikasi = "jordymempun@gmail.com";
+    const passwordAplikasi = "123456"; 
+
+    signInWithEmailAndPassword(auth, emailAplikasi, passwordAplikasi)
+        .then((userCredential) => {
+            console.log("Login Berhasil!", userCredential.user);
+            window.location.href = "halaman2.html"; // Pindah halaman
+        })
+        .catch((error) => {
+            console.error("Gagal Login:", error.code, error.message);
+            alert("Gagal masuk: " + error.message);
         });
+}
+
     <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
