@@ -137,7 +137,7 @@ function jalankanLogin(event) {
     signInWithEmailAndPassword(auth, emailAplikasi, passwordAplikasi)
         .then((userCredential) => {
             console.log("Login Berhasil!", userCredential.user);
-            window.location.href = "halaman2.html"; // Pindah halaman
+            window.location.href = "halaman4.html"; // Pindah halaman
         })
         .catch((error) => {
             console.error("Gagal Login:", error.code, error.message);
