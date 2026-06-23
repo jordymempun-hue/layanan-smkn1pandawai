@@ -143,7 +143,25 @@
                 errorBox.style.display = 'block'; // Tampilkan pesan error jika salah
             }
         });
-    </script>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCSdKzabXgWTMjuGyDzRKfSgBzSqgJLPjw",
+    authDomain: "smkn1pdw-87d17.firebaseapp.com",
+    databaseURL: "https://smkn1pdw-87d17-default-rtdb.firebaseio.com",
+    projectId: "smkn1pdw-87d17",
+    storageBucket: "smkn1pdw-87d17.firebasestorage.app",
+    messagingSenderId: "42700023540",
+    appId: "1:42700023540:web:86d3712e318a0da07820a1"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
 </body>
 </html>
