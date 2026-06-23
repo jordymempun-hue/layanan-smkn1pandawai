@@ -1,1 +1,112 @@
-﻿<h1>Selamat Datang! Anda Berhasil Masuk Halaman Kedua.</h1>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login SMKN 1 PDW</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        h2 { text-align: center; margin-bottom: 5px; color: #333; }
+        p.sub { text-align: center; font-size: 12px; color: #777; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-size: 14px; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-masuk { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        .btn-masuk:hover { background-color: #0056b3; }
+        #pesan-status { font-size: 13px; text-align: center; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Masuk Aplikasi</h2>
+    <p class="sub">SMKN 1 PDW</p>
+    
+    <div id="kotak-login">
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" value="Jordymempun@gmail.com" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" value="@Jfm010105" required>
+        </div>
+        <button type="button" id="btn-submit" class="btn-masuk">Login</button>
+    </div>
+
+    <div id="pesan-status"></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://gstatic.com";
+    import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
+    import { getDatabase } from "https://gstatic.com";
+
+    // Konfigurasi Resmi Milik Anda
+    const firebaseConfig = {
+      apiKey: "AIzaSyCSdKzabXgWTMjuGyDzRKfSgBzSqgJLPjw",
+      authDomain: "smkn1pdw-87d17.firebaseapp.com",
+      databaseURL: "https://firebaseio.com",
+      projectId: "smkn1pdw-87d17",
+      storageBucket: "smkn1pdw-87d17.firebasestorage.app",
+      messagingSenderId: "42700023540",
+      appId: "1:42700023540:web:86d3712e318a0da07820a1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    const btnSubmit = document.getElementById("btn-submit");
+    const pesanStatus = document.getElementById("pesan-status");
+
+    btnSubmit.addEventListener("click", () => {
+        const txtEmail = document.getElementById("email").value;
+        const txtPassword = document.getElementById("password").value;
+
+        pesanStatus.style.color = "blue";
+        pesanStatus.innerText = "Menghubungi server Firebase...";
+
+        signInWithEmailAndPassword(auth, txtEmail, txtPassword)
+            .then((userCredential) => {
+                pesanStatus.style.color = "green";
+                pesanStatus.innerText = "Login Berhasil! Mengalihkan halaman...";
+                
+                // PERBAIKAN JALUR REDIRECT KHUSUS GITHUB PAGES SUB-FOLDER
+                setTimeout(() => {
+                    // Menggunakan titik (.) di depan memastikan browser mencari file di folder yang sama
+                    window.location.href = "./halaman2.html"; 
+                }, 800);
+            })
+            .catch((error) => {
+                console.error("Detail Error Kode:", error.code);
+                pesanStatus.style.color = "red";
+                
+                if (error.code === 'auth/invalid-credential') {
+                    pesanStatus.innerText = "Gagal: Email/Password salah atau akun belum aktif di Firebase Console.";
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    pesanStatus.innerText = "Gagal: Domain diblokir Firebase. Silakan tunggu 5 menit sejak Anda meng-add domain tadi.";
+                } else {
+                    pesanStatus.innerText = "Error: " + error.code;
+                }
+            });
+    });
+</script>
+
+</body>
+</html>
