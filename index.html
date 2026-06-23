@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Login Modern</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0; /* Menghilangkan margin bawaan browser */
+    
+    background-image: url('1726933753318.jpg');
+    background-size: cover; /* Memastikan gambar memenuhi seluruh layar */
+    background-position: center; /* Memastikan gambar tetap di tengah */
+    background-repeat: no-repeat; /* Mencegah gambar berulang/banyak */
+}
+        }
+
+        .login-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+        }
+
+            .login-container h2 {
+                margin-bottom: 24px;
+                color: #333333;
+                font-size: 28px;
+                font-weight: 600;
+                text-align: center;
+            }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+            .input-group input {
+                width: 100%;
+                padding: 14px 16px;
+                border: 2px solid #e1e1e1;
+                border-radius: 8px;
+                font-size: 16px;
+                transition: all 0.3s ease;
+                outline: none;
+            }
+
+                .input-group input:focus {
+                    border-color: #764ba2;
+                    box-shadow: 0 0 8px rgba(118, 75, 162, 0.2);
+                }
+
+        /* Pesan Error */
+        .error-message {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: none; /* Sembunyi secara default */
+            text-align: center;
+            background-color: #fff5f5;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #fed7d7;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background-color: #764ba2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.1s ease;
+            text-align: center;
+        }
+
+            .btn-login:hover {
+                background-color: #5a377e;
+            }
+
+            .btn-login:active {
+                transform: scale(0.98);
+            }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Masuk</h2>
+
+        <!-- Tempat menampilkan pesan kesalahan -->
+        <div id="errorBox" class="error-message">Email atau password salah!</div>
+
+        <!-- Tag <a> dihapus, diganti dengan handle submit pada form -->
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" id="emailInput" placeholder="Email atau ponsel" value="jordymempun@gmail.com" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="passwordInput" placeholder="Masukkan sandi Anda" value="12345" required>
+            </div>
+            <!-- Type diubah menjadi submit -->
+            <button type="submit" class="btn-login">Berikutnya</button>
+        </form>
+    </div>
+
+    <script>
+        // Data akun penentu (bisa Anda ganti sesuai kebutuhan)
+        const emailBenar = "jordymempun@gmail.com";
+        const passwordBenar = "12345";
+
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            // Mencegah form langsung berpindah halaman secara otomatis
+            event.preventDefault();
+
+            // Ambil data inputan user
+            const inputEmail = document.getElementById('emailInput').value;
+            const inputPassword = document.getElementById('passwordInput').value;
+            const errorBox = document.getElementById('errorBox');
+
+            // Proses Pengecekan
+            if (inputEmail === emailBenar && inputPassword === passwordBenar) {
+                errorBox.style.display = 'none'; // Sembunyikan error jika benar
+                window.location.href = "halaman4.html"; // Pindah ke halaman sukses
+            } else {
+                errorBox.style.display = 'block'; // Tampilkan pesan error jika salah
+            }
+        });
+    </script>
+
+</body>
+</html>
