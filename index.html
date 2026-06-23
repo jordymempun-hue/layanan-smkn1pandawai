@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uji Coba Realtime Firebase</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        #output-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #eef2f3;
+            border: 2px dashed #95a5a6;
+            border-radius: 8px;
+        }
+
+        #textTampil {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        #statusKoneksi {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Uji Sinkronisasi Data</h2>
+    <input type="text" id="inputData" placeholder="Ketik teks di sini...">
+    <button id="btnSimpan">Kirim ke Semua Perangkat</button>
+
+    <div id="output-box">
+        <div id="textTampil">Menghubungkan ke Firebase...</div>
+        <div id="statusKoneksi">Memeriksa jaringan...</div>
+    </div>
+
+    <!-- SCRIPT UTAMA FIREBASE V10 -->
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getDatabase, ref, set, onValue } from "https://gstatic.com";
+
+        // =================================================================
+        // MASUKKAN CONFIG ASLI ANDA DI BAWAH INI (Ambil dari Project Settings Firebase)
+        // =================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSy...",
+            authDomain: "://firebaseapp.com",
+            databaseURL: "https://firebaseio.com", // WAJIB ADA URL INI
+            projectId: "proyek-anda",
+            storageBucket: "://appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+        // =================================================================
+
+        // Inisialisasi Aplikasi
+        try {
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const dbRef = ref(database, 'pesanUtama');
+
+            document.getElementById('statusKoneksi').innerText = "Firebase berhasil diinisialisasi.";
+
+            // 1. Fungsi Mengirim Data
+            document.getElementById('btnSimpan').addEventListener('click', () => {
+                const teksInput = document.getElementById('inputData').value;
+                if (teksInput.trim() !== "") {
+                    document.getElementById('statusKoneksi').innerText = "Sedang mengirim data...";
+
+                    set(dbRef, teksInput)
+                        .then(() => {
+                            document.getElementById('inputData').value = "";
+                            document.getElementById('statusKoneksi').innerText = "Data berhasil dikirim ke Cloud!";
+                        })
+                        .catch((error) => {
+                            document.getElementById('statusKoneksi').innerText = "Gagal Kirim: " + error.message;
+                            console.error(error);
+                        });
+                }
+            });
+
+            // 2. Fungsi Menerima Data secara Real-time
+            onValue(dbRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    document.getElementById('textTampil').innerText = data;
+                    document.getElementById('statusKoneksi').innerText = "Data diperbarui dari Cloud.";
+                } else {
+                    document.getElementById('textTampil').innerText = "(Database Masih Kosong)";
+                }
+            }, (error) => {
+                document.getElementById('textTampil').innerText = "Gagal Memuat Data!";
+                document.getElementById('statusKoneksi').innerText = "Error: " + error.message;
+                console.error(error);
+            });
+
+        } catch (err) {
+            document.getElementById('textTampil').innerText = "Error Konfigurasi!";
+            document.getElementById('statusKoneksi').innerText = err.message;
+        }
+    </script>
+</body>
+</html>
